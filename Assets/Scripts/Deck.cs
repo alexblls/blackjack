@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class Deck : MonoBehaviour
 {
     public Sprite[] faces;
+    Sprite[] facesRandom = new Sprite[52];
     public GameObject dealer;
     public GameObject player;
     public Button hitButton;
@@ -13,6 +14,8 @@ public class Deck : MonoBehaviour
     public Text probMessage;
 
     public int[] values = new int[52];
+    int[] valuesRandom = new int[52];
+
     int cardIndex = 0;    
        
     private void Awake()
@@ -34,6 +37,25 @@ public class Deck : MonoBehaviour
          * En principio, la posición de cada valor se deberá corresponder con la posición de faces. 
          * Por ejemplo, si en faces[1] hay un 2 de corazones, en values[1] debería haber un 2.
          */
+        int valorCarta = 1;
+        int posicionCarta = 1;
+
+        for (int i = 0; i < values.Length; i++)
+        {
+            values[i] = valorCarta;
+
+            if (posicionCarta % 13 == 0)
+            {
+                valorCarta = 0;
+            }
+
+            if (!(valorCarta >= 10))
+            {
+                valorCarta++;
+            }
+        
+            posicionCarta++;
+        }
     }
 
     private void ShuffleCards()
@@ -42,7 +64,20 @@ public class Deck : MonoBehaviour
          * Barajar las cartas aleatoriamente.
          * El método Random.Range(0,n), devuelve un valor entre 0 y n-1
          * Si lo necesitas, puedes definir nuevos arrays.
-         */       
+         */
+        int cont = 0;
+
+        while (cont != values.Length-1)
+        {
+            int valorRandom = Random.Range(0, values.Length);
+
+            if (valuesRandom[valorRandom] == 0)
+            {
+                valuesRandom[valorRandom] = values[cont];
+                facesRandom[valorRandom] = faces[cont];
+                cont++;
+            }
+        }
     }
 
     void StartGame()
@@ -54,6 +89,12 @@ public class Deck : MonoBehaviour
             /*TODO:
              * Si alguno de los dos obtiene Blackjack, termina el juego y mostramos mensaje
              */
+            if (player.GetComponent<CardHand>().points == 21 || dealer.GetComponent<CardHand>().points == 21)
+            {
+                //poner mensaje final
+                stickButton.interactable = false;
+                hitButton.interactable = false;
+            }
         }
     }
 
@@ -72,7 +113,8 @@ public class Deck : MonoBehaviour
         /*TODO:
          * Dependiendo de cómo se implemente ShuffleCards, es posible que haya que cambiar el índice.
          */
-        dealer.GetComponent<CardHand>().Push(faces[cardIndex],values[cardIndex]);
+        //hecho
+        dealer.GetComponent<CardHand>().Push(facesRandom[cardIndex], valuesRandom[cardIndex]);
         cardIndex++;        
     }
 
@@ -81,7 +123,8 @@ public class Deck : MonoBehaviour
         /*TODO:
          * Dependiendo de cómo se implemente ShuffleCards, es posible que haya que cambiar el índice.
          */
-        player.GetComponent<CardHand>().Push(faces[cardIndex], values[cardIndex]/*,cardCopy*/);
+        //hecho
+        player.GetComponent<CardHand>().Push(facesRandom[cardIndex], valuesRandom[cardIndex]/*,cardCopy*/);
         cardIndex++;
         CalculateProbabilities();
     }       
