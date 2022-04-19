@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 
 public class Deck : MonoBehaviour
@@ -11,8 +11,8 @@ public class Deck : MonoBehaviour
     public Button hitButton;
     public Button stickButton;
     public Button playAgainButton;
-    //public Text finalMessage;
-    //public Text probMessage;
+    public Text finalMessage;
+    public Text probMessage;
 
     public int[] values = new int[52];
     int[] valuesRandom = new int[52];
@@ -21,6 +21,7 @@ public class Deck : MonoBehaviour
        
     private void Awake()
     {    
+
         InitCardValues();        
 
     }
@@ -92,22 +93,104 @@ public class Deck : MonoBehaviour
              */
             if (player.GetComponent<CardHand>().points == 21 || dealer.GetComponent<CardHand>().points == 21)
             {
-                //poner mensaje final
-                //finalMessage.
-                //stickButton.interactable = false;
-                //hitButton.interactable = false;
+                finalMessage.text = "Partida finalizada";
+                stickButton.interactable = false;
+                hitButton.interactable = false;
             }
         }
     }
 
     private void CalculateProbabilities()
     {
+        float PtosJugador = player.GetComponent<CardHand>().points;
+        float PtosDealer = dealer.GetComponent<CardHand>().points;
+        float cartasActuales = (values.Length - cardIndex);
+
         /*TODO:
          * Calcular las probabilidades de:
          * - Teniendo la carta oculta, probabilidad de que el dealer tenga más puntuación que el jugador
          * - Probabilidad de que el jugador obtenga entre un 17 y un 21 si pide una carta
          * - Probabilidad de que el jugador obtenga más de 21 si pide una carta          
          */
+
+        float DealerMasJugador()
+        {
+            float casosFavorables = 0;
+            Debug.Log("Resta"+ (PtosJugador - PtosDealer));
+
+            if ((PtosJugador - PtosDealer) < 0){
+               
+                Debug.Log(PtosJugador);
+                Debug.Log(PtosDealer);
+                Debug.Log(cardIndex);
+
+                return 1;
+            }
+
+            else
+            {
+                for(int i=0; i<cartasActuales; i++)
+                {
+
+                    if (PtosDealer > PtosJugador)
+                    {
+                        casosFavorables++;
+                    }
+
+                }
+
+                Debug.Log(PtosJugador);
+                Debug.Log(PtosDealer);
+                Debug.Log(cardIndex);
+
+                return casosFavorables;
+
+            }
+
+
+
+        }
+         
+        
+        float entre17y21()
+        {
+            float casosFavorables = 0;
+           
+
+            for(int i = 0; i < cartasActuales; i++){
+                float ActPtosJugador= PtosJugador + values[cardIndex-1];
+
+                if ((ActPtosJugador > 17) && (ActPtosJugador < 21))
+                {
+                    casosFavorables++;
+                }
+
+            }
+            return casosFavorables / cartasActuales;
+
+        }
+
+        float Mas21()
+        {
+            float casosFavorables = 0;
+            for (int i = 0; i < cartasActuales; i++)
+            {
+                float NuevosPtosJugador= PtosJugador + values[cardIndex-1];
+
+                if(NuevosPtosJugador > 21)
+                {
+                    casosFavorables++;
+                }
+            }
+            return casosFavorables / cartasActuales;
+
+
+
+
+        }
+
+
+        probMessage.text = DealerMasJugador().ToString();
     }
 
     void PushDealer()
@@ -162,8 +245,8 @@ public class Deck : MonoBehaviour
 
     public void PlayAgain()
     {
-        //hitButton.interactable = true;
-        //stickButton.interactable = true;
+        hitButton.interactable = true;
+        stickButton.interactable = true;
         finalMessage.text = "";
         player.GetComponent<CardHand>().Clear();
         dealer.GetComponent<CardHand>().Clear();          
