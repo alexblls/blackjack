@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
+
 
 public class Deck : MonoBehaviour
 {
@@ -10,8 +11,8 @@ public class Deck : MonoBehaviour
     public Button hitButton;
     public Button stickButton;
     public Button playAgainButton;
-    public Text finalMessage;
-    public Text probMessage;
+    //public Text finalMessage;
+    //public Text probMessage;
 
     public int[] values = new int[52];
     int[] valuesRandom = new int[52];
@@ -92,8 +93,9 @@ public class Deck : MonoBehaviour
             if (player.GetComponent<CardHand>().points == 21 || dealer.GetComponent<CardHand>().points == 21)
             {
                 //poner mensaje final
-                stickButton.interactable = false;
-                hitButton.interactable = false;
+                //finalMessage.
+                //stickButton.interactable = false;
+                //hitButton.interactable = false;
             }
         }
     }
@@ -160,8 +162,8 @@ public class Deck : MonoBehaviour
 
     public void PlayAgain()
     {
-        hitButton.interactable = true;
-        stickButton.interactable = true;
+        //hitButton.interactable = true;
+        //stickButton.interactable = true;
         finalMessage.text = "";
         player.GetComponent<CardHand>().Clear();
         dealer.GetComponent<CardHand>().Clear();          
