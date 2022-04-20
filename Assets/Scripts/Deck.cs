@@ -118,10 +118,8 @@ public class Deck : MonoBehaviour
 
     private void CalculateProbabilities()
     {
-       // float PtosJugador = player.GetComponent<CardHand>().points;
-        //float PtosDealer = dealer.GetComponent<CardHand>().points;
         float cartasActuales = 52- cardIndex;
-        int diferencia = player.GetComponent<CardHand>().points - dealer.GetComponent<CardHand>().points;
+        float diferencia = player.GetComponent<CardHand>().points - dealer.GetComponent<CardHand>().points;
 
         /*TODO:
          * Calcular las probabilidades de:
@@ -140,6 +138,7 @@ public class Deck : MonoBehaviour
             }
             else if (player.GetComponent<CardHand>().points == dealer.GetComponent<CardHand>().points)
             {
+                Debug.Log(player.GetComponent<CardHand>().points +" "+ dealer.GetComponent<CardHand>().points);
                 return 0;
             }
             else
@@ -160,12 +159,13 @@ public class Deck : MonoBehaviour
         float entre17y21()
         {
             float casosFavorables = 0;
-           
+       
 
-            for(int i = 0; i < cartasActuales; i++){
-                float ActPtosJugador= player.GetComponent<CardHand>().points + values[cardIndex-1];
-
-                if ((ActPtosJugador > 17) && (ActPtosJugador < 21))
+            for (int i = cardIndex - 1; i < valuesRandom.Length; i++)
+            {
+                float ActPtosJugador= player.GetComponent<CardHand>().points + valuesRandom[i];
+               
+                if ((ActPtosJugador >= 17) && (ActPtosJugador <= 21))
                 {
                     casosFavorables++;
                 }
@@ -175,12 +175,12 @@ public class Deck : MonoBehaviour
 
         }
 
-       /* float Mas21()
+        float Mas21()
         {
             float casosFavorables = 0;
-            for (int i = 0; i < cartasActuales; i++)
+            for (int i = cardIndex - 1; i < valuesRandom.Length; i++)
             {
-                float NuevosPtosJugador= PtosJugador + values[cardIndex-1];
+                float NuevosPtosJugador= player.GetComponent<CardHand>().points + valuesRandom[i];
 
                 if(NuevosPtosJugador > 21)
                 {
@@ -192,10 +192,12 @@ public class Deck : MonoBehaviour
 
 
 
-        }*/
+        }
 
 
         probMessage.text = DealerMasJugador().ToString();
+        probMessage2.text = entre17y21().ToString();
+        probMessage3.text = Mas21().ToString();
     }
 
     void PushDealer()
@@ -232,7 +234,7 @@ public class Deck : MonoBehaviour
         //Repartimos carta al jugador
         PushPlayer();
 
-        float PtosJugador = player.GetComponent<CardHand>().points;
+        int PtosJugador = player.GetComponent<CardHand>().points;
 
 
         /*TODO:
@@ -255,8 +257,6 @@ public class Deck : MonoBehaviour
 
     public void Stand()
     {
-        //float PtosJugador = player.GetComponent<CardHand>().points;
-        //float PtosDealer = dealer.GetComponent<CardHand>().points;
         /*TODO: 
          * Si estamos en la mano inicial, debemos voltear la primera carta del dealer.
          */
