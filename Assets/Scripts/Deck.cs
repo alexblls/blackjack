@@ -86,7 +86,7 @@ public class Deck : MonoBehaviour
 
         while (cont != values.Length-1)
         {
-            Debug.Log(cont);
+        
             int valorRandom = Random.Range(0, values.Length);
 
             if (valuesRandom[valorRandom] == 0)
@@ -143,7 +143,6 @@ public class Deck : MonoBehaviour
             }
             else if (player.GetComponent<CardHand>().points == dealer.GetComponent<CardHand>().points)
             {
-                Debug.Log(player.GetComponent<CardHand>().points +" "+ dealer.GetComponent<CardHand>().points);
                 return 0;
             }
             else
