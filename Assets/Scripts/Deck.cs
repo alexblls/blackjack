@@ -79,9 +79,14 @@ public class Deck : MonoBehaviour
          * Si lo necesitas, puedes definir nuevos arrays.
          */
         int cont = 0;
+        for (int i = 0; i <51 ; i++)
+        {
+            valuesRandom[i] = 0;
+        }
 
         while (cont != values.Length-1)
         {
+            Debug.Log(cont);
             int valorRandom = Random.Range(0, values.Length);
 
             if (valuesRandom[valorRandom] == 0)
@@ -188,13 +193,7 @@ public class Deck : MonoBehaviour
                 }
             }
             return casosFavorables / cartasActuales;
-
-
-
-
         }
-
-
         probMessage.text = DealerMasJugador().ToString();
         probMessage2.text = entre17y21().ToString();
         probMessage3.text = Mas21().ToString();
@@ -219,14 +218,10 @@ public class Deck : MonoBehaviour
         player.GetComponent<CardHand>().Push(facesRandom[cardIndex], valuesRandom[cardIndex]/*,cardCopy*/);
         cardIndex++;
         CalculateProbabilities();
-        
-       
     }       
 
     public void Hit()
     {
-       
-      
         /*TODO: 
          * Si estamos en la mano inicial, debemos voltear la primera carta del dealer.
          */
@@ -252,7 +247,6 @@ public class Deck : MonoBehaviour
 
             End();
         }
-
     }
 
     public void Stand()
@@ -291,14 +285,11 @@ public class Deck : MonoBehaviour
                 End();
                
             }
-
-
         }
         if (dealer.GetComponent<CardHand>().points > 21)
         {
             finalMessage.text = "Has ganado";
         }
-
     }
 
     public void End()
@@ -306,21 +297,19 @@ public class Deck : MonoBehaviour
         dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
         hitButton.interactable = false;
         stickButton.interactable = false;
-
     }
     public void PlayAgain()
     {
         hitButton.interactable = true;
         stickButton.interactable = true;
         finalMessage.text = "";
+        probMessage.text = "";
+        probMessage2.text = "";
+        probMessage3.text = "";
         player.GetComponent<CardHand>().Clear();
         dealer.GetComponent<CardHand>().Clear();          
         cardIndex = 0;
         ShuffleCards();
         StartGame();
-        
-
-
     }
-    
 }
