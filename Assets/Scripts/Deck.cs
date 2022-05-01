@@ -104,6 +104,7 @@ public class Deck : MonoBehaviour
         {
             PushPlayer();
             PushDealer();
+            
             /*TODO:
              * Si alguno de los dos obtiene Blackjack, termina el juego y mostramos mensaje
              */
@@ -119,12 +120,15 @@ public class Deck : MonoBehaviour
                 End();
             }
         }
+        dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
+        dealer.GetComponent<CardHand>().cards[1].GetComponent<CardModel>().ToggleFace(false);
     }
 
     private void CalculateProbabilities()
     {
+       
         float cartasActuales = 52- cardIndex;
-        float diferencia = player.GetComponent<CardHand>().points - dealer.GetComponent<CardHand>().points;
+        float diferencia = player.GetComponent<CardHand>().points -( dealer.GetComponent<CardHand>().points);
 
         /*TODO:
          * Calcular las probabilidades de:
@@ -132,6 +136,7 @@ public class Deck : MonoBehaviour
          * - Probabilidad de que el jugador obtenga entre un 17 y un 21 si pide una carta
          * - Probabilidad de que el jugador obtenga más de 21 si pide una carta          
          */
+        
 
         float DealerMasJugador()
         {
@@ -141,20 +146,19 @@ public class Deck : MonoBehaviour
 
                 return 1;
             }
-            else if (player.GetComponent<CardHand>().points == dealer.GetComponent<CardHand>().points)
+            else if (player.GetComponent<CardHand>().points == (dealer.GetComponent<CardHand>().points ))
             {
                 return 0;
             }
             else
             {
-                for (int i = cardIndex-1; i < valuesRandom.Length; i++)
+                for (int i = cardIndex; i < valuesRandom.Length; i++)
                 {
-                    if (valuesRandom[i] >= diferencia)
+                    if (valuesRandom[i] > diferencia)
                     {
                         casosFavorables++;
                     }
-                }               
-
+                }
                 return casosFavorables/cartasActuales;
             }
         }
@@ -193,9 +197,9 @@ public class Deck : MonoBehaviour
             }
             return casosFavorables / cartasActuales;
         }
-        probMessage.text = DealerMasJugador().ToString();
-        probMessage2.text = entre17y21().ToString();
-        probMessage3.text = Mas21().ToString();
+        probMessage.text ="Deal > Play: "+ DealerMasJugador().ToString();
+        probMessage2.text = "17<=x<=21: "+ entre17y21().ToString();
+        probMessage3.text ="X>21: "+ Mas21().ToString();
     }
 
     void PushDealer()
@@ -293,7 +297,7 @@ public class Deck : MonoBehaviour
 
     public void End()
     {
-        dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
+        dealer.GetComponent<CardHand>().cards[1].GetComponent<CardModel>().ToggleFace(true);
         hitButton.interactable = false;
         stickButton.interactable = false;
     }
